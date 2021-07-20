@@ -68,6 +68,7 @@ void ShoppingList::on_pushButton_clicked(){
 }
 
 void ShoppingList::addToIngridients(Ingridient i){
+
     for(auto element = ingridients->begin() ; element!=ingridients->end() ; element++){
         if(element->getName()==i.getName()&&element->getUnit()==i.getUnit()){
             float quan = element->getQuantity().toFloat() + i.getQuantity().toFloat();

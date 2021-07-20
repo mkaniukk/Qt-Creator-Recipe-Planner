@@ -16,14 +16,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dialog.cpp \
+    ingridient.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    recipe.cpp \
+    recipedata.cpp \
+    shoppinglist.cpp
 
 HEADERS += \
-    mainwindow.h
+    dialog.h \
+    ingridient.h \
+    mainwindow.h \
+    recipe.h \
+    recipedata.h \
+    shoppinglist.h
 
 FORMS += \
-    mainwindow.ui
+    dialog.ui \
+    mainwindow.ui \
+    shoppinglist.ui
     
 unix {
     INCLUDEPATH += /usr/lib/gcc/x86_64-linux-gnu/9/include

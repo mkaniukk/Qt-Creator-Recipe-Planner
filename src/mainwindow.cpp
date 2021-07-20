@@ -1,15 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-    this->setWindowTitle("Address picker");
-    ui->cityComboBox->addItem("London");
-    ui->cityComboBox->addItem("Paris");
-    ui->cityComboBox->addItem("Viena");
-    ui->cityComboBox->addItem("Berlin");
+//#include "recipedata.h"
 
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+    ui->setupUi(this);
+    filename = new QString();
+    setup();
 }
 
 MainWindow::~MainWindow()
@@ -17,47 +14,105 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::saveToFile(QString filename)
+void MainWindow::on_addButton_clicked()
 {
-    QFile file;
-    file.setFileName(filename);
-
-    if(!file.open(QIODevice::WriteOnly | QFile::Append))
-        return;
-
-    file.write(ui->firstnameLineEdit->text().toUtf8()+";");
-    file.write(ui->lastnameLineEdit->text().toUtf8()+";");
-    file.write(ui->cityComboBox->currentText().toUtf8()+";");
-    file.write(ui->streetLineEdit->text().toUtf8()+";");
-    file.write(ui->noLineEdit->text().toUtf8()+";");
-    if(ui->maleRadioButton->isChecked())
-        file.write("male");
-    else if(ui->femaleRadioButton_2->isChecked())
-        file.write("female");
-    file.write(("\n"));
-
-    file.close();
+    dialog = new Dialog();
+    connect(dialog, SIGNAL(accepted()), this, SLOT(setup()));
+    dialog->initializeWindow(QModelIndex(), data, filename);
+    dialog->show();
+    fillTableWithNames();
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_editButton_clicked()
 {
-    saveToFile("address.txt");
+    QModelIndex index = ui->tableView->currentIndex();
+    if(index.isValid())
+        on_tableView_doubleClicked(index);
+    fillTableWithNames();
+    setup();
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_deleteButton_clicked()
 {
-    ui->firstnameLineEdit->clear();
-    ui->lastnameLineEdit->clear();
-    ui->streetLineEdit->clear();
-    ui->noLineEdit->clear();
+    QModelIndex index = ui->tableView->currentIndex();
+    QString name = index.data().toString();
+    data->remove(name);
+    data->saveToFile(*filename);
+    fillTableWithNamesUsingFile();
+    ui->tableView->update();
+    setup();
+
 }
 
-void MainWindow::on_maleRadioButton_clicked()
-{
-    ui->femaleRadioButton_2->setChecked(false);
+void MainWindow::fillTableWithNamesUsingFile(){
+
+    int i = 0;
+    foreach (auto const el, data->getRecipes()) {
+        QModelIndex index = model->index(i++, 0, QModelIndex());
+        model->setData(index, el.getName(), Qt::EditRole);
+    }
 }
 
-void MainWindow::on_femaleRadioButton_2_clicked()
+void MainWindow::fillTableWithNames(){
+
+    int i = 0;
+    foreach (auto const el, data->getRecipes()) {
+        QModelIndex index = model->index(i++, 0, QModelIndex());
+        model->setData(index, el.getName(), Qt::EditRole);
+    }
+}
+
+void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    ui->maleRadioButton->setChecked(false);
+    dialog = new Dialog();
+    connect(dialog, SIGNAL(accepted()), this, SLOT(setup()));
+    dialog->initializeWindow(index, data, filename);
+    dialog->show();
+    setup();
+}
+
+void MainWindow::updateRecipe(){
+
+    Recipe r = dialog->updateRecipe();
+    data->getRecipes().append(r);
+    fillTableWithNames();
+}
+
+void MainWindow::setup(){
+
+    data = new RecipeData();
+    data->initializeData(*filename);
+    model = new QStandardItemModel(data->getRecipes().length(), 1, this);
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Recipe"));
+    ui->tableView->setModel(model);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    fillTableWithNames();
+}
+
+
+void MainWindow::on_actionNew_triggered()
+{
+    *filename = QFileDialog::getOpenFileName(this, "Open file", tr("(*.*)"), tr("(*.json)"));
+    setup();
+}
+
+void MainWindow::on_actionClose_triggered()
+{
+    *filename = "";
+    setup();
+}
+
+void MainWindow::on_actionNew_2_triggered()
+{
+    *filename = QFileDialog::getSaveFileName(this, "New file", tr(".json"), tr("(*.json)"));
+    data->saveToFile(*filename);
+    setup();
+}
+
+void MainWindow::on_actionShopping_List_triggered()
+{
+    shoppinglist = new ShoppingList();
+    shoppinglist->initialize(data);
+    shoppinglist->show();
 }
