@@ -3,14 +3,14 @@
 Simple recipe planner for storing data about the recipes and creating shopping lists.
 
 ### Main window of the application
-<p align="center" width="200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/mainwindow.png"></p>
+<img align="center" width="200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/mainwindow.png">
 
 ### Interface used to add recipe to the list
-<p align="center" width = "200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/addwindow.png"></p>
+<img align="center" width = "200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/addwindow.png">
 
 ### Interface used to edit selecte recipe
-<p align="center" width = "200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/editwindow.png"></p>
+<img align="center" width = "200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/editwindow.png">
 
 ### Interface for creating shopping list
-<p align="center" width = "200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/shoppinglistwindow.png"></p>
+<img align="center" width = "200" src="https://github.com/mkaniukk/Qt-Creator-Recipe-Planner/blob/main/assets/shoppinglistwindow.png">
 
