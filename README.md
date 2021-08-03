@@ -15,7 +15,7 @@ Simple recipe planner for storing data about the recipes and creating shopping l
 - Each ingredient has name, quantity and unit where:
  - name is a multiword string (like bread flour)
  - quantity is a float number (like 1.0)
- - unit is a multiword string (any string is treated as a unit - so "red balbinka" is also a unit)
+ - unit is a multiword string (any string is treated as a unit - so "red onion" is also a unit)
 
 ### Menu Dialog
 
